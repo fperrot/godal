@@ -2581,6 +2581,23 @@ func (ds *Dataset) CreateLayer(name string, sr *SpatialRef, gtype GeometryType, 
 	return Layer{majorObject{C.GDALMajorObjectH(hndl)}}, nil
 }
 
+// NewGeometryFromGeoJSON creates a new Geometry from its GeoJSON representation
+func NewGeometryFromGeoJSON(geoJSON string, opts ...NewGeometryOption) (*Geometry, error) {
+	no := &newGeometryOpts{}
+	for _, o := range opts {
+		o.setNewGeometryOpt(no)
+	}
+
+	cgeoJSON := C.CString(geoJSON)
+	defer C.free(unsafe.Pointer(cgeoJSON))
+	cgc := createCGOContext(nil, no.errorHandler)
+	hndl := C.godalNewGeometryFromGeoJSON(cgc.cPointer(), (*C.char)(unsafe.Pointer(cgeoJSON)))
+	if err := cgc.close(); err != nil {
+		return nil, err
+	}
+	return &Geometry{isOwned: true, handle: hndl}, nil
+}
+
 // NewGeometryFromWKT creates a new Geometry from its WKT representation
 func NewGeometryFromWKT(wkt string, sr *SpatialRef, opts ...NewGeometryOption) (*Geometry, error) {
 	no := &newGeometryOpts{}

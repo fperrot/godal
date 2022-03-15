@@ -108,6 +108,7 @@ extern "C" {
 	size_t godalVSIRead(VSILFILE *f, void *buf, int len, char **errmsg);
 	OGRGeometryH godal_OGR_G_Simplify(cctx *ctx, OGRGeometryH in, double tolerance);
 	OGRGeometryH godal_OGR_G_Buffer(cctx *ctx, OGRGeometryH in, double tolerance, int segments);
+	OGRGeometryH godalNewGeometryFromGeoJSON(cctx *ctx, char *geoJSON);
 	OGRGeometryH godalNewGeometryFromWKT(cctx *ctx, char *wkt, OGRSpatialReferenceH sr);
 	OGRGeometryH godalNewGeometryFromWKB(cctx *ctx, void *wkb, int wkbLen,OGRSpatialReferenceH sr);
 	char* godalExportGeometryWKT(cctx *ctx, OGRGeometryH in);

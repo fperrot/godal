@@ -848,6 +848,20 @@ void godalClearRasterStatistics(cctx *ctx, GDALDatasetH ds){
   godalUnwrap();
 }
 
+OGRGeometryH godalNewGeometryFromGeoJSON(cctx *ctx, char *geoJSON) {
+	godalWrap(ctx);
+	OGRGeometryH gptr = OGR_G_CreateGeometryFromJson(geoJSON);
+	if(gptr == nullptr) {
+		forceError(ctx);
+	}
+	if(failed(ctx) && gptr != nullptr) {
+		OGR_G_DestroyGeometry(gptr);
+		gptr = nullptr;
+	}
+	godalUnwrap();
+	return gptr;
+}
+
 OGRGeometryH godalNewGeometryFromWKT(cctx *ctx, char *wkt, OGRSpatialReferenceH sr) {
 	godalWrap(ctx);
 	OGRGeometryH gptr = nullptr;
